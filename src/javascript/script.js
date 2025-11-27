@@ -15,19 +15,22 @@ $(document).ready(function(){
 
     $(window).on('scroll', function() {
         const header = $('header');
-        const scrollPosition = $(window).scrollTop() - header.outerHeight();
+        const scrollPosition = $(window).scrollTop();
+        const headerHeight = header.outerHeight();
 
-        let activeSectionIndex = 0;
-
-        if (scrollPosition <= 0) {
-            header.css('box-shadow', 'none');
+        // Efeito de blur e sombra no header - MELHORIA QUE TÍNHAMOS FEITO
+        if (scrollPosition > 100) {
+            header.addClass('scrolled');
         } else {
-            header.css('box-shadow', '5px 1px 5px rgba(0, 0, 0, 0.1)');
+            header.removeClass('scrolled');
         }
+
+        // Navegação ativa - FUNCIONALIDADE COMPLETA
+        let activeSectionIndex = 0;
 
         sections.each(function(i) {
             const section = $(this);
-            const sectionTop = section.offset().top - 70;
+            const sectionTop = section.offset().top - 100;
             const sectionBottom = sectionTop + section.outerHeight();
 
             if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
@@ -40,7 +43,7 @@ $(document).ready(function(){
         $(navItems[activeSectionIndex]).addClass('active');
     });
 
-    // Animações com ScrollReveal
+    // Animações com ScrollReveal - TODAS AS ANIMAÇÕES ORIGINAIS
     ScrollReveal().reveal('#cta', {
         origin: 'left',
         duration: 2000,
@@ -66,4 +69,97 @@ $(document).ready(function(){
         distance: '30px',
         interval: 150
     });
+});
+
+// Efeito de máquina de escrever apenas no slogan
+function typeWriterSlogan() {
+    const sloganElement = document.querySelector('#cta h3');
+    if (!sloganElement) return;
+    
+    const originalText = sloganElement.textContent;
+    
+    let i = 0;
+    sloganElement.textContent = '';
+    
+    function type() {
+        if (i < originalText.length) {
+            sloganElement.textContent += originalText.charAt(i);
+            i++;
+            setTimeout(type, 60); // Velocidade média
+        }
+    }
+    
+    // Iniciar com um pequeno delay
+    setTimeout(type, 2000);
+}
+
+// Chamar quando a página carregar
+$(document).ready(function(){
+    typeWriterSlogan();
+});
+
+// Controle inteligente da setinha
+function handleScrollIndicator() {
+    const scrollIndicator = $('.scroll-indicator');
+    const scrollPosition = $(window).scrollTop();
+    
+    // Se rolou mais que 100px, esconde a setinha
+    if (scrollPosition > 100) {
+        scrollIndicator.addClass('hidden');
+    } else {
+        scrollIndicator.removeClass('hidden');
+    }
+}
+
+// Clique na setinha para rolar suave
+$('.scroll-indicator').on('click', function() {
+    $('html, body').animate({
+        scrollTop: $('#about').offset().top
+    }, 800);
+});
+
+// Atualizar ao rolar
+$(window).on('scroll', function() {
+    handleScrollIndicator();
+});
+
+// Chamar quando carregar
+$(document).ready(function(){
+    handleScrollIndicator();
+});
+
+    // FILTROS DE PROJETOS - VERSÃO MELHORADA
+    $('.filter-btn').on('click', function() {
+        const filter = $(this).data('filter');
+        
+        // Ativar botão clicado
+        $('.filter-btn').removeClass('active');
+        $(this).addClass('active');
+        
+        // Mostrar/ocultar projetos com animação
+        if (filter === 'all') {
+            $('.project-card').stop(true, true).fadeIn(300);
+        } else {
+            $('.project-card').stop(true, true).hide();
+            $(`.project-card[data-categories*="${filter}"]`).fadeIn(300);
+        }
+    });
+
+    // Clicar numa tag filtra automaticamente
+$('.project-tags span').on('click', function() {
+    const filter = $(this).data('filter');
+    $(`.filter-btn[data-filter="${filter}"]`).click();
+});
+
+// BOTÃO VOLTAR AO TOPO - VERSÃO SIMPLES
+$(window).on('scroll', function() {
+    if ($(window).scrollTop() > 1100) {
+        $('#back-to-top').removeClass('hidden');
+    } else {
+        $('#back-to-top').addClass('hidden');
+    }
+});
+
+$('#back-to-top').on('click', function() {
+    $('html, body').animate({ scrollTop: 0 }, 800);
 });

@@ -34,10 +34,11 @@
       </li>
     </ul>
 
-    <a 
+   <a 
         href="https://drive.google.com/file/d/1eRHadWmfXilLlxituWZw1iVnB6BeWoQq/view?usp=sharing"
         class="btn-default"
-        target="_blank">Curriculo
+        target="_blank"
+        rel="noopener noreferrer">Curriculo
     </a>
 
     <button id="mobile_btn">
@@ -63,31 +64,42 @@
         <h3>Explorando o poder dos dados e da tecnologia para simplificar o mundo</h3>
         
         <div id="cta_buttons">
-            <a href="https://drive.google.com/file/d/1eRHadWmfXilLlxituWZw1iVnB6BeWoQq/view?usp=sharing" class="btn-default">Curriculo</a>  
-            <a href="tel:+5591982105221" id="phone_button">
-                <button class="btn-default">
-                    <i class="fa-solid fa-phone"></i>
-                </button>
-                (91) 98210-5221
-            </a>
-        </div>
+    <a href="https://drive.google.com/file/d/1eRHadWmfXilLlxituWZw1iVnB6BeWoQq/view?usp=sharing" 
+       class="btn-default" 
+       target="_blank" 
+       rel="noopener noreferrer">Curriculo</a>  
+    <a href="tel:+5591982105221" id="phone_button">
+        <button class="btn-default">
+            <i class="fa-solid fa-phone"></i>
+        </button>
+        (91) 98210-5221
+    </a>
+</div>
         
         <div class="social_media-buttons">
-            <a href="https://wa.me/5591982105221">
-                <i class="fa-brands fa-whatsapp"></i>
-            </a>
-            <a href="https://www.linkedin.com/in/bruna-maia-dos-santos/">
-                <i class="fa-brands fa-linkedin"></i>
-            </a>
-            <a href="mailto:bmaiads@gmail.com">
-                <i class="fa-solid fa-envelope"></i>
-            </a>
-        </div>
+    <a href="https://wa.me/5591982105221" target="_blank" rel="noopener noreferrer">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+    <a href="https://www.linkedin.com/in/bruna-maia-dos-santos/" target="_blank" rel="noopener noreferrer">
+        <i class="fa-brands fa-linkedin"></i>
+    </a>
+    <a href="mailto:bmaiads@gmail.com" target="_blank" rel="noopener noreferrer">
+        <i class="fa-solid fa-envelope"></i>
+    </a>
+</div>
+
     </div>
+
+</div>
     
     <div id="banner">
         <img src="#" alt="">
     </div>
+
+    <div class="scroll-indicator">
+    <i class="fa-solid fa-chevron-down"></i>
+</div>
+
 </section>
 
 
@@ -123,17 +135,29 @@
   </div>
 </section>
           
-       <section id="projects"> 
+    <section id="projects"> 
     <h2 class="section-title">Projetos</h2>
+
+    <!-- FILTROS -->
+    <div class="project-filters">
+        <button class="filter-btn active" data-filter="all">Todos</button>
+        <button class="filter-btn" data-filter="power-apps">Power Apps</button>
+        <button class="filter-btn" data-filter="power-bi">Power BI</button>
+        <button class="filter-btn" data-filter="power-automate">Power Automate</button>
+        <button class="filter-btn" data-filter="sharepoint">SharePoint</button>
+    </div>
 
     <div id="projects-container">
 
-        <div class="project-card">
-            <img src="src/imagens/biblioteca/dashboard.png" class="project-image" alt="Imagem do projeto">
+        <div class="project-card" data-categories="power-apps sharepoint">
+            <!-- IMAGEM CLICÁVEL -->
+            <a href="bibliotecapessoal.html" class="project-image-link">
+                <img src="src/imagens/biblioteca/dashboard.png" class="project-image" alt="Dashboard Biblioteca Pessoal">
+            </a>
 
             <div class="project-tags">
-                <span>Power Apps</span>
-                <span>SharePoint</span>
+                <span data-filter="power-apps">Power Apps</span>
+                <span data-filter="sharepoint">SharePoint</span>
             </div>
 
             <h3 class="project-title">Biblioteca Pessoal</h3>
@@ -145,12 +169,15 @@
             <a href="bibliotecapessoal.html" class="btn-default">Veja mais</a>
         </div>
 
-        <div class="project-card">
-            <img src="src/imagens/treinamentos/boasvindastreinamento.png" class="project-image" alt="Imagem do projeto">
+        <div class="project-card" data-categories="power-apps sharepoint">
+            <!-- IMAGEM CLICÁVEL -->
+            <a href="gestaotreinamentos.html" class="project-image-link">
+                <img src="src/imagens/treinamentos/boasvindastreinamento.png" class="project-image" alt="Tela de Boas-Vindas Treinamentos">
+            </a>
 
             <div class="project-tags">
-                <span>Power Apps</span>
-                <span>SharePoint</span>
+                <span data-filter="power-apps">Power Apps</span>
+                <span data-filter="sharepoint">SharePoint</span>
             </div>
 
             <h3 class="project-title">Gestão de Treinamentos</h3>
@@ -162,12 +189,14 @@
             <a href="gestaotreinamentos.html" class="btn-default">Veja mais</a>
         </div>
         
-        <div class="project-card">
-            <img src="src/imagens/forca/telainicial.png" class="project-image" alt="Imagem do projeto">
+        <div class="project-card" data-categories="power-apps">
+            <!-- IMAGEM CLICÁVEL -->
+            <a href="forca.html" class="project-image-link">
+                <img src="src/imagens/forca/telainicial.png" class="project-image" alt="Tela Inicial Jogo da Forca">
+            </a>
 
             <div class="project-tags">
-                <span>Power Apps</span>
-                <span>SharePoint</span>
+                <span data-filter="power-apps">Power Apps</span>
             </div>
 
             <h3 class="project-title">Jogo da Forca</h3>
@@ -179,13 +208,16 @@
             <a href="forca.html" class="btn-default">Veja mais</a>
         </div>
 
-        <div class="project-card">
-            <img src="src/imagens/contratos/Ilustrações.png" class="project-image" alt="Imagem do projeto">
+        <div class="project-card" data-categories="power-apps sharepoint power-automate">
+            <!-- IMAGEM CLICÁVEL -->
+            <a href="#" class="project-image-link" style="cursor: not-allowed;">
+                <img src="src/imagens/contratos/Ilustrações.png" class="project-image" alt="Ilustração Gestão de Contratos" style="opacity: 0.7;">
+            </a>
 
             <div class="project-tags">
-                <span>Power Apps</span>
-                <span>SharePoint</span>
-                <span>Power Automate</span>
+                <span data-filter="power-apps">Power Apps</span>
+                <span data-filter="sharepoint">SharePoint</span>
+                <span data-filter="power-automate">Power Automate</span>
             </div>
 
             <h3 class="project-title">Gestão de Contratos</h3>
@@ -197,11 +229,14 @@
             <a href="#" class="btn-default" style="opacity: 0.7; cursor: not-allowed;">Em desenvolvimento</a>
         </div>
 
-        <div class="project-card">
-            <img src="src/imagens/jogovelha/jogovelha.png" class="project-image" alt="Imagem do projeto">
+        <div class="project-card" data-categories="power-apps">
+            <!-- IMAGEM CLICÁVEL -->
+            <a href="jogovelha.html" class="project-image-link">
+                <img src="src/imagens/jogovelha/jogovelha.png" class="project-image" alt="Interface Jogo da Velha">
+            </a>
 
             <div class="project-tags">
-                <span>Power Apps</span>
+                <span data-filter="power-apps">Power Apps</span>
             </div>
 
             <h3 class="project-title">Jogo da Velha</h3>
@@ -220,7 +255,7 @@
 
     </main>
 
-   <footer>
+      <footer>
     <img src="src/imagens/wave.svg" alt="">
 
     <div id="footer_items">
@@ -229,17 +264,23 @@
         </span>
 
         <div class="social_media-buttons">
-            <a href="https://wa.me/5591982105221">
+            <a href="https://wa.me/5591982105221" target="_blank" rel="noopener noreferrer">
                 <i class="fa-brands fa-whatsapp"></i>
             </a>
-
-            <a href="https://www.linkedin.com/in/bruna-maia-dos-santos/">
+            <a href="https://www.linkedin.com/in/bruna-maia-dos-santos/" target="_blank" rel="noopener noreferrer">
                 <i class="fa-brands fa-linkedin"></i>
             </a>
-
-            <a href="mailto:bmaiads@gmail.com">
+            <a href="mailto:bmaiads@gmail.com" target="_blank" rel="noopener noreferrer">
                 <i class="fa-solid fa-envelope"></i>
             </a>
         </div>
     </div>
 </footer>
+
+<!-- BOTÃO VOLTAR AO TOPO - ADICIONE AQUI -->
+<button id="back-to-top" class="hidden">
+    <i class="fa-solid fa-chevron-up"></i>
+</button>
+
+</body>
+</html>
