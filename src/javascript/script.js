@@ -151,15 +151,25 @@ $('.project-tags span').on('click', function() {
     $(`.filter-btn[data-filter="${filter}"]`).click();
 });
 
-// BOTÃO VOLTAR AO TOPO - VERSÃO SIMPLES
-$(window).on('scroll', function() {
-    if ($(window).scrollTop() > 1100) {
-        $('#back-to-top').removeClass('hidden');
-    } else {
-        $('#back-to-top').addClass('hidden');
-    }
-});
-
-$('#back-to-top').on('click', function() {
-    $('html, body').animate({ scrollTop: 0 }, 800);
-});
+    // BOTÃO VOLTAR AO TOPO - VERSÃO CORRIGIDA
+    $(document).ready(function(){
+        const backToTopButton = $('#back-to-top');
+        
+        // Mostrar/ocultar botão ao rolar
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 300) {
+                backToTopButton.removeClass('hidden');
+            } else {
+                backToTopButton.addClass('hidden');
+            }
+        });
+        
+        // Rolagem suave ao clicar - CORRIGIDO
+        backToTopButton.on('click', function(e) {
+            e.preventDefault();
+            $('html, body').animate({
+                scrollTop: 0
+            }, 800, 'swing');
+            return false;
+        });
+    });
