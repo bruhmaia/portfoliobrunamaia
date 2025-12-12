@@ -117,12 +117,9 @@
     max-height: 80vh;
     object-fit: contain;
     transition: transform 0.3s ease;
-    transform: translateX(35px);
+    transform: translateX(60px);
 }
 
-#banner img:hover {
-    transform: scale(1.02);
-}
 
 .shape {
     background: linear-gradient(135deg, var(--color-primary-2), var(--color-primary-4));
