@@ -1,117 +1,186 @@
-$(document).ready(function(){
-    // Alterna o menu no mobile
-    $('#mobile_btn').on('click', function(){
-        $('#nav_list').toggleClass('active');
-        $(this).find('i').toggleClass('fa-x fa-bars');
+// Espera o DOM carregar completamente
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // ========== MENU MOBILE ==========
+    const mobileBtn = document.getElementById('mobile_btn');
+    const navList = document.getElementById('nav_list');
+    
+    mobileBtn.addEventListener('click', function() {
+        navList.classList.toggle('active');
+        const icon = this.querySelector('i');
+        icon.classList.toggle('fa-x');
+        icon.classList.toggle('fa-bars');
     });
 
-    $('#nav_list .nav-item a').on('click', function(){
-        $('#nav_list').removeClass('active');
-        $('#mobile_btn').find('i').removeClass('fa-x');
+    // Fecha menu ao clicar em um item
+    const navItems = document.querySelectorAll('.nav-item a');
+    navItems.forEach(item => {
+        item.addEventListener('click', function() {
+            navList.classList.remove('active');
+            const icon = mobileBtn.querySelector('i');
+            icon.classList.remove('fa-x');
+            icon.classList.add('fa-bars');
+        });
     });
 
-    const sections = $('section');
-    const navItems = $('.nav-item');
+    // ========== SCROLL - HEADER E NAVEGAÇÃO ==========
+    const sections = document.querySelectorAll('section');
+    const navItemsAll = document.querySelectorAll('.nav-item');
+    const header = document.querySelector('header');
+    const backToTopBtn = document.getElementById('back-to-top');
+    const scrollIndicator = document.querySelector('.scroll-indicator');
 
-    $(window).on('scroll', function() {
-        const header = $('header');
-        const scrollPosition = $(window).scrollTop();
-        const headerHeight = header.outerHeight();
+    window.addEventListener('scroll', function() {
+        const scrollPosition = window.scrollY;
+        const headerHeight = header.offsetHeight;
 
         // Efeito de blur e sombra no header
         if (scrollPosition > 100) {
-            header.addClass('scrolled');
+            header.classList.add('scrolled');
         } else {
-            header.removeClass('scrolled');
+            header.classList.remove('scrolled');
         }
 
-        // Navegação ativa
+        // Navegação ativa baseada na seção visível
         let activeSectionIndex = 0;
 
-        sections.each(function(i) {
-            const section = $(this);
-            const sectionTop = section.offset().top - 100;
-            const sectionBottom = sectionTop + section.outerHeight();
+        sections.forEach((section, index) => {
+            const sectionTop = section.offsetTop - 100;
+            const sectionBottom = sectionTop + section.offsetHeight;
 
             if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
-                activeSectionIndex = i;
-                return false;
+                activeSectionIndex = index;
             }
         });
 
-        navItems.removeClass('active');
-        $(navItems[activeSectionIndex]).addClass('active');
+        navItemsAll.forEach(item => item.classList.remove('active'));
+        if (navItemsAll[activeSectionIndex]) {
+            navItemsAll[activeSectionIndex].classList.add('active');
+        }
 
-        // BOTÃO VOLTAR AO TOPO - CORRIGIDO
+        // Botão voltar ao topo
         if (scrollPosition > 300) {
-            $('#back-to-top').removeClass('hidden');
+            backToTopBtn.classList.remove('hidden');
         } else {
-            $('#back-to-top').addClass('hidden');
+            backToTopBtn.classList.add('hidden');
+        }
+
+        // Controle da setinha
+        if (scrollPosition > 100) {
+            scrollIndicator.classList.add('hidden');
+        } else {
+            scrollIndicator.classList.remove('hidden');
         }
     });
 
-    // CLICK DO BOTÃO VOLTAR AO TOPO
-    $('#back-to-top').on('click', function() {
-        $('html, body').animate({
-            scrollTop: 0
-        }, 800);
+    // ========== BOTÃO VOLTAR AO TOPO ==========
+    backToTopBtn.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
     });
 
-    // Animações com ScrollReveal
-    ScrollReveal().reveal('#cta', {
-        origin: 'left',
-        duration: 2000,
-        distance: '20%'
-    });
+    // ========== CLIQUE NA SETINHA ==========
+    if (scrollIndicator) {
+        scrollIndicator.addEventListener('click', function() {
+            const aboutSection = document.getElementById('about');
+            if (aboutSection) {
+                window.scrollTo({
+                    top: aboutSection.offsetTop,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    }
 
-    ScrollReveal().reveal('.project-card', {
-        origin: 'left',
-        duration: 1500,
-        distance: '50px',
-        interval: 200
-    });
+    // ========== FILTROS DE PROJETOS ==========
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const projectCards = document.querySelectorAll('.project-card');
 
-    ScrollReveal().reveal('#about', {
-        origin: 'right',
-        duration: 1500,
-        distance: '50px'
-    });
-
-    ScrollReveal().reveal('.education-item', {
-        origin: 'bottom',
-        duration: 1200,
-        distance: '30px',
-        interval: 150
-    });
-
-    // Efeito de máquina de escrever apenas no slogan
-    typeWriterSlogan();
-
-    // Controle da setinha
-    handleScrollIndicator();
-
-    // FILTROS DE PROJETOS
-    $('.filter-btn').on('click', function() {
-        const filter = $(this).data('filter');
-        
-        // Ativar botão clicado
-        $('.filter-btn').removeClass('active');
-        $(this).addClass('active');
-        
-        // Mostrar/ocultar projetos com animação
-        if (filter === 'all') {
-            $('.project-card').stop(true, true).fadeIn(300);
-        } else {
-            $('.project-card').stop(true, true).hide();
-            $(`.project-card[data-categories*="${filter}"]`).fadeIn(300);
-        }
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const filter = this.dataset.filter;
+            
+            // Ativar botão clicado
+            filterBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Mostrar/ocultar projetos com animação
+            if (filter === 'all') {
+                projectCards.forEach(card => {
+                    card.style.display = 'flex';
+                    // Pequeno delay para animação
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'scale(1)';
+                    }, 10);
+                });
+            } else {
+                projectCards.forEach(card => {
+                    const categories = card.dataset.categories;
+                    
+                    if (categories && categories.includes(filter)) {
+                        card.style.display = 'flex';
+                        setTimeout(() => {
+                            card.style.opacity = '1';
+                            card.style.transform = 'scale(1)';
+                        }, 10);
+                    } else {
+                        card.style.opacity = '0';
+                        card.style.transform = 'scale(0.95)';
+                        setTimeout(() => {
+                            card.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            }
+        });
     });
 
     // Clicar numa tag filtra automaticamente
-    $('.project-tags span').on('click', function() {
-        const filter = $(this).data('filter');
-        $(`.filter-btn[data-filter="${filter}"]`).click();
+    const projectTags = document.querySelectorAll('.project-tags span');
+    projectTags.forEach(tag => {
+        tag.addEventListener('click', function() {
+            const filter = this.dataset.filter;
+            const targetBtn = document.querySelector(`.filter-btn[data-filter="${filter}"]`);
+            if (targetBtn) {
+                targetBtn.click();
+            }
+        });
     });
+
+    // ========== ANIMAÇÕES COM SCROLLREVEAL ==========
+    if (typeof ScrollReveal !== 'undefined') {
+        ScrollReveal().reveal('#cta', {
+            origin: 'left',
+            duration: 2000,
+            distance: '20%'
+        });
+
+        ScrollReveal().reveal('.project-card', {
+            origin: 'left',
+            duration: 1500,
+            distance: '50px',
+            interval: 200
+        });
+
+        ScrollReveal().reveal('#about', {
+            origin: 'right',
+            duration: 1500,
+            distance: '50px'
+        });
+
+        ScrollReveal().reveal('.education-item', {
+            origin: 'bottom',
+            duration: 1200,
+            distance: '30px',
+            interval: 150
+        });
+    }
+
+    // ========== EFEITO DE MÁQUINA DE ESCREVER ==========
+    typeWriterSlogan();
 });
 
 // Efeito de máquina de escrever apenas no slogan
@@ -134,22 +203,3 @@ function typeWriterSlogan() {
     
     setTimeout(type, 2000);
 }
-
-// Controle inteligente da setinha
-function handleScrollIndicator() {
-    const scrollIndicator = $('.scroll-indicator');
-    const scrollPosition = $(window).scrollTop();
-    
-    if (scrollPosition > 100) {
-        scrollIndicator.addClass('hidden');
-    } else {
-        scrollIndicator.removeClass('hidden');
-    }
-}
-
-// Clique na setinha para rolar suave
-$('.scroll-indicator').on('click', function() {
-    $('html, body').animate({
-        scrollTop: $('#about').offset().top
-    }, 800);
-});
