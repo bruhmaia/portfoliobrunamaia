@@ -1,136 +1,163 @@
-$(document).ready(function() {
-    // Alterna o menu no mobile
-    $('#mobile_btn').on('click', function() {
-        $('#nav_list').toggleClass('active');
-        $(this).find('i').toggleClass('fa-x fa-bars');
-    });
 
-    // Fecha o menu ao clicar em um link
-    $('#nav_list .nav-item a').on('click', function() {
-        $('#nav_list').removeClass('active');
-        $('#mobile_btn').find('i').removeClass('fa-x');
-    });
+// Funcionalidades específicas das páginas de projeto
+// ========================================
 
-    // Navegação suave para âncoras internas
-    $('#nav_list a[href^="#"]').on('click', function(e) {
-        e.preventDefault();
-
-        const target = $(this.getAttribute('href'));
-        if (target.length) {
-            $('html, body').stop().animate({
-                scrollTop: target.offset().top - 70 // Ajuste para a altura do header
-            }, 800);
-        }
-    });
-
-    // Ativação do menu conforme scroll (específico para página de projeto)
-    const projectSections = [
-        'project-detail',
-        'sobre-projeto',
-        'funcionalidades',
-        'telas-aplicativo',
-        'processo-desenvolvimento'
-    ];
-
-    const navItems = $('.nav-item');
-
-    $(window).on('scroll', function() {
-        const header = $('header');
-        const scrollPosition = $(window).scrollTop() + 100;
-
-        // Sombra no header quando scrollar
-        if (scrollPosition > 50) {
-            header.css('box-shadow', '5px 1px 5px rgba(0, 0, 0, 0.1)');
-        } else {
-            header.css('box-shadow', 'none');
-        }
-
-        // Ativação das seções do projeto
-        let currentSection = '';
-
-        projectSections.forEach(sectionId => {
-            const section = $(`#${sectionId}`);
-            if (section.length) {
-                const sectionTop = section.offset().top - 100;
-                const sectionBottom = sectionTop + section.outerHeight();
-
-                if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
-                    currentSection = sectionId;
+(function() {
+    'use strict';
+    
+    // Aguarda DOM carregar
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+    
+    function init() {
+        addSectionIDs();
+        initSmoothScroll();
+        initScrollIndicator();
+        initProjectScrollReveal();
+    }
+    
+    // ========================================
+    // ADICIONA IDs NAS SEÇÕES
+    // ========================================
+    function addSectionIDs() {
+        const sectionMap = {
+            '.project-about': 'sobre-projeto',
+            '.project-features': 'funcionalidades',
+            '.app-screens-detailed': 'telas-aplicativo',
+            '.project-process': 'processo-desenvolvimento'
+        };
+        
+        Object.entries(sectionMap).forEach(([selector, id]) => {
+            const section = document.querySelector(selector);
+            if (section && !section.id) {
+                section.id = id;
+            }
+        });
+    }
+    
+    // ========================================
+    // NAVEGAÇÃO SUAVE
+    // ========================================
+    function initSmoothScroll() {
+        const navLinks = document.querySelectorAll('#nav_list a[href^="#"]');
+        
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove focus após clicar (remove o quadrado)
+                this.blur();
+                
+                const targetId = this.getAttribute('href');
+                const target = document.querySelector(targetId);
+                
+                if (target) {
+                    const headerHeight = 80;
+                    const targetPosition = target.offsetTop - headerHeight;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
                 }
+            });
+        });
+    }
+    
+    // ========================================
+    // SCROLL INDICATOR (Setinha para baixo)
+    // Para páginas de projeto - scrolla para #sobre-projeto
+    // ========================================
+    function initScrollIndicator() {
+        const scrollIndicator = document.querySelector('.scroll-indicator');
+        
+        if (!scrollIndicator) return;
+        
+        scrollIndicator.addEventListener('click', function() {
+            const sobreSection = document.getElementById('sobre-projeto');
+            if (sobreSection) {
+                const headerHeight = 80;
+                const targetPosition = sobreSection.offsetTop - headerHeight;
+                
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
             }
         });
-
-        navItems.removeClass('active');
-
-        if (currentSection) {
-            $(`#nav_list .nav-item a[href="#${currentSection}"]`)
-                .parent()
-                .addClass('active');
+    }
+    
+    // ========================================
+    // SCROLL REVEAL - PÁGINAS DE PROJETO
+    // ========================================
+    function initProjectScrollReveal() {
+        if (typeof ScrollReveal === 'undefined') return;
+        
+        const sr = ScrollReveal();
+        
+        // Feature cards
+        if (document.querySelectorAll('.feature-card').length > 0) {
+            sr.reveal('.hero-stats .stat', {
+            origin: 'left',      // ← ERA 'bottom'
+            duration: 1200,      // ← ERA 800ms (50% mais lento)
+            distance: '50px',    // ← ERA 20px (movimento maior)
+            interval: 250,       // ← ERA 150ms (mais espaçado)
+            delay: 300          // ← ERA 500ms (começa mais cedo)
+        });
         }
-    });
-
-    // Adiciona IDs às seções do projeto
-    function initProjectSections() {
-        // Remove IDs existentes para evitar conflitos
-        $('.project-about, .project-features, .app-screens-detailed, .project-process')
-            .removeAttr('id');
-
-        // Adiciona novos IDs
-        $('.project-about').attr('id', 'sobre-projeto');
-        $('.project-features').attr('id', 'funcionalidades');
-        $('.app-screens-detailed').attr('id', 'telas-aplicativo');
-        $('.project-process').attr('id', 'processo-desenvolvimento');
-        // O project-detail já tem ID no HTML
+        
+        // Screen items (telas do app)
+        if (document.querySelectorAll('.screen-item').length > 0) {
+            sr.reveal('.screen-item', {
+                duration: 1000,
+                distance: '50px',
+                delay: 200,
+                interval: 300
+            });
+        }
+        
+        // Process steps
+        if (document.querySelectorAll('.process-step').length > 0) {
+            sr.reveal('.process-step', {
+                origin: 'right',
+                duration: 1000,
+                distance: '30px',
+                delay: 100,
+                interval: 200
+            });
+        }
+        
+        // Hero stats
+        if (document.querySelectorAll('.hero-stats .stat').length > 0) {
+            sr.reveal('.hero-stats .stat', {
+                origin: 'bottom',
+                duration: 800,
+                distance: '20px',
+                interval: 150,
+                delay: 500
+            });
+        }
+        
+        // About section
+        if (document.querySelector('.about-text')) {
+            sr.reveal('.about-text', {
+                origin: 'left',
+                duration: 1200,
+                distance: '40px'
+            });
+        }
+        
+        if (document.querySelector('.about-video')) {
+            sr.reveal('.about-video', {
+                origin: 'right',
+                duration: 1200,
+                distance: '40px',
+                delay: 300
+            });
+        }
     }
-
-    // Simula navegação entre as telas do mockup
-    function initScreenInteractions() {
-        // Navegação da galeria para detalhes
-        $('.review-card').on('click', function() {
-            alert('Navegando para os detalhes completos da avaliação...');
-        });
-
-        // Filtros da galeria
-        $('.reviews-filter span').on('click', function() {
-            $('.reviews-filter span').removeClass('filter-active');
-            $(this).addClass('filter-active');
-        });
-
-        // Filtros do catálogo
-        $('.filter-pill').on('click', function() {
-            if (!$(this).hasClass('active')) {
-                $('.filter-pill').removeClass('active');
-                $(this).addClass('active');
-            }
-        });
-    }
-
-    // Inicializa todas as funções
-    initProjectSections();
-    initScreenInteractions();
-});
-
-// Animações específicas para a página do projeto
-if (typeof ScrollReveal !== 'undefined') {
-    ScrollReveal().reveal('.feature-card', {
-        origin: 'bottom',
-        duration: 1000,
-        distance: '30px',
-        delay: 200,
-        interval: 200
-    });
-
-    ScrollReveal().reveal('.screen-item', {
-        duration: 1000,
-        distance: '50px',
-        delay: 300
-    });
-
-    ScrollReveal().reveal('.process-step', {
-        origin: 'right',
-        duration: 1000,
-        distance: '30px',
-        delay: 200,
-        interval: 200
-    });
-}
+    
+})();

@@ -232,6 +232,11 @@ header.scrolled {
     border-radius: 4px;
 }
 
+/* Remove o outline após o clique (só mantém no Tab) */
+.nav-item a:focus:not(:focus-visible) {
+    outline: none;
+}
+
 /* Animação suave no hover */
 .nav-item a::after {
     content: '';
